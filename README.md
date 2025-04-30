@@ -1,6 +1,5 @@
 # Project was Generated with CIEL
 
-
 ## Project Title
 
 A brief description of your project.
