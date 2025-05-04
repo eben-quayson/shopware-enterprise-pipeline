@@ -14,7 +14,7 @@ kinesis_client = boto3.client('kinesis')
 
 # Environment-configurable values
 KINESIS_STREAM_NAME = os.environ.get("KINESIS_STREAM_NAME")
-EXTERNAL_API_URL = "http://18.203.232.58:8000/api/web-traffic/"
+EXTERNAL_API_URL = os.getenv("EXTERNAL_API_URL")
 
 def lambda_handler(event, context):
     try:
