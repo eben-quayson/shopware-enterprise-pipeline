@@ -1,10 +1,30 @@
 .venv/
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.db
-*.sqlite3
-*.egg-info/
-*.egg/
+# Ignore Terraform state files
+*.tfstate
+*.tfstate.*
+
+*.tfstate
+# Ignore Terraform lock file
+.terraform.lock.hcl
+
+# Ignore local .terraform directories
+**/.terraform/*
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+
+# Ignore Terraform variable files (may contain sensitive data)
+*.tfvars
+*.tfvars.json
+
+# Ignore crash log files
+crash.log
+
+# Ignore log files
 *.log
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
