@@ -4,16 +4,15 @@ import requests
 import boto3
 import os
 
-
 # Set up logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-# Initialize Kinesis client
-kinesis_client = boto3.client('kinesis')
+# Initialize Firehose client
+firehose_client = boto3.client('firehose')
 
 # Environment-configurable values
-KINESIS_STREAM_NAME = os.environ.get("KINESIS_STREAM_NAME")
+FIREHOSE_STREAM_NAME = os.environ.get("FIREHOSE_STREAM_NAME")
 EXTERNAL_API_URL = os.getenv("EXTERNAL_API_URL")
 
 def lambda_handler(event, context):
@@ -25,13 +24,14 @@ def lambda_handler(event, context):
 
             # Perform validation
             if "session_id" in data and "page" in data and "timestamp" in data:
-                # Push valid data to Kinesis stream
-                kinesis_client.put_record(
-                    StreamName=KINESIS_STREAM_NAME,
-                    Data=json.dumps(data),
-                    PartitionKey=str(data["session_id"])
+                # Push valid data to Firehose delivery stream
+                firehose_client.put_record(
+                    DeliveryStreamName=FIREHOSE_STREAM_NAME,
+                    Record={
+                        'Data': json.dumps(data) + '\n'  # Newline for newline-delimited JSON in S3
+                    }
                 )
-                logger.info(f"Web traffic log data pushed to Kinesis: {data}")
+                logger.info(f"Web traffic log data pushed to Firehose: {data}")
             else:
                 logger.warning(f"Invalid web traffic log data: {data}")
         else:
