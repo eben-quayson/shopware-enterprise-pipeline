@@ -23,3 +23,7 @@ resource "aws_s3_bucket_policy" "lakehouse_bucket_policy" {
     ]
   })
 }
+
+resource "aws_s3_bucket" "staging_bucket" {
+  bucket = "external-staging-bucket-shopware"
+}

@@ -28,3 +28,9 @@ module "cloudwatch" {
 
   lambda_producers = module.lambda.lambda_producers
 }
+
+module "glue" {
+  source = "./modules/glue"
+
+  lakehouse_bucket_name = var.lakehouse_bucket_name
+}
