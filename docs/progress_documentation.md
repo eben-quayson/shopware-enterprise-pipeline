@@ -1,4 +1,4 @@
-# Project Progress Documentation – Shopware Enterprise Lakehouse
+# Project Progress Documentation – Shopware Enterprise Pipeline
 
 ## Project Title
 **Shopware Enterprise Data Lakehouse – Real-Time Analytics Platform**
