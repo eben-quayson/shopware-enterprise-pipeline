@@ -59,6 +59,7 @@ resource "aws_lambda_function" "producers" {
   runtime          = "python3.8"
   source_code_hash = each.value.output_base64sha256
   filename         = each.value.output_path
+  timeout          = 60
 
   environment {
     variables = {

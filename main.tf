@@ -25,4 +25,6 @@ module "firehose" {
 
 module "cloudwatch" {
   source = "./modules/cloudwatch"
+
+  lambda_producers = module.lambda.lambda_producers
 }

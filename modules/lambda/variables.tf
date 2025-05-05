@@ -11,7 +11,7 @@ variable "producers" {
     }
 
     web_traffic_logs = {
-      firehose_stream_name = "wtl-firehose-stream"
+      firehose_stream_name = "web-traffic-firehose-stream"
       external_api_url     = "http://18.203.232.58:8000/api/web-traffic/"
     }
   }
