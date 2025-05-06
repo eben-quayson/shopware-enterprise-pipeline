@@ -99,6 +99,33 @@ resource "aws_glue_job" "move_inventory_glue_job" {
 
 }
 
+# Triggers
+resource "aws_glue_trigger" "pos_glue_trigger" {
+  name     = "trigger_pos_glue_job"
+  type     = "SCHEDULED"
+  schedule = "cron(0 2 * * ? *)" # Every day at 2 AM UTC
+
+  actions {
+    job_name = aws_glue_job.mov_pos_glue_job.name
+  }
+
+  enabled = false
+}
+
+resource "aws_glue_trigger" "inventory_glue_trigger" {
+  name     = "trigger_inventory_glue_job"
+  type     = "SCHEDULED"
+  schedule = "cron(5 * * * ? *)" # 5 minutes past every hour
+
+  actions {
+    job_name = aws_glue_job.move_inventory_glue_job.name
+  }
+
+  enabled = false
+}
+
+
+
 resource "aws_glue_catalog_database" "my_catalog_database" {
   name = "shopware"
 }
