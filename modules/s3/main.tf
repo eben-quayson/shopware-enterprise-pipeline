@@ -3,6 +3,10 @@ resource "aws_s3_bucket" "lakehouse_bucket" {
 }
 
 
+resource "aws_s3_bucket" "shopware_glue_bucket" {
+  bucket = var.shopware_glue_bucket_name
+}
+
 resource "aws_s3_bucket_policy" "lakehouse_bucket_policy" {
   bucket = aws_s3_bucket.lakehouse_bucket.id
 
@@ -25,5 +29,19 @@ resource "aws_s3_bucket_policy" "lakehouse_bucket_policy" {
 }
 
 resource "aws_s3_bucket" "staging_bucket" {
-  bucket = "external-staging-bucket-shopware"
+  bucket = var.ingestion_bucket_name
+}
+
+resource "aws_s3_object" "move_pos_script" {
+  bucket = aws_s3_bucket.shopware_glue_bucket.id
+  key    = "scripts/move_pos_to_bronze.py"
+  source = "${path.module}/scripts/move_pos_to_bronze.py"
+  etag   = filemd5("${path.module}/scripts/move_pos_to_bronze.py")
+}
+
+resource "aws_s3_object" "move_inventory_script" {
+  bucket = aws_s3_bucket.shopware_glue_bucket.id
+  key    = "scripts/move_inventory_to_bronze.py"
+  source = "${path.module}/scripts/move_inventory_to_bronze.py"
+  etag   = filemd5("${path.module}/scripts/move_inventory_to_bronze.py")
 }

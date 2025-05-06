@@ -1,7 +1,9 @@
 module "s3" {
   source = "./modules/s3"
 
-  lakehouse_bucket_name = var.lakehouse_bucket_name
+  lakehouse_bucket_name     = var.lakehouse_bucket_name
+  shopware_glue_bucket_name = var.shopware_glue_bucket_name
+  ingestion_bucket_name     = var.ingestion_bucket_name
 }
 
 module "lambda" {
@@ -32,5 +34,8 @@ module "cloudwatch" {
 module "glue" {
   source = "./modules/glue"
 
-  lakehouse_bucket_name = var.lakehouse_bucket_name
+  lakehouse_bucket_name     = var.lakehouse_bucket_name
+  shopware_glue_bucket_name = var.shopware_glue_bucket_name
+  ingestion_bucket_name     = var.ingestion_bucket_name
 }
+

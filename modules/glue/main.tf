@@ -51,6 +51,53 @@ resource "aws_iam_role_policy" "glue_policy" {
   })
 }
 
+# Glue Jobs
+resource "aws_glue_job" "mov_pos_glue_job" {
+  name     = "move_pos_to_bronze"
+  role_arn = aws_iam_role.glue_service_role.arn
+  command {
+    # python shell
+    name            = "pythonshell"
+    script_location = "s3://${var.shopware_glue_bucket_name}/scripts/move_pos_to_bronze.py"
+    python_version  = "3.9"
+  }
+  max_capacity = 0.0625
+
+  default_arguments = {
+    "--SOURCE_BUCKET"                    = var.ingestion_bucket_name
+    "--SOURCE_PREFIX"                    = "pos/"
+    "--DESTINATION_BUCKET"               = var.lakehouse_bucket_name
+    "--DESTINATION_PREFIX"               = "bronze/pos/"
+    "--job-language"                     = "python"
+    "--TempDir"                          = "s3://${var.shopware_glue_bucket_name}/tmp/"
+    "--enable-continuous-cloudwatch-log" = "true"
+    "--enable-continuous-log-filter"     = "true"
+  }
+}
+
+resource "aws_glue_job" "move_inventory_glue_job" {
+  name     = "move_inventory_to_bronze"
+  role_arn = aws_iam_role.glue_service_role.arn
+  command {
+    # python shell
+    name            = "pythonshell"
+    script_location = "s3://${var.shopware_glue_bucket_name}/scripts/move_inventory_to_bronze.py"
+    python_version  = "3.9"
+  }
+  max_capacity = 0.0625
+
+  default_arguments = {
+    "--SOURCE_BUCKET"                    = var.ingestion_bucket_name
+    "--SOURCE_PREFIX"                    = "inventory/"
+    "--DESTINATION_BUCKET"               = var.lakehouse_bucket_name
+    "--DESTINATION_PREFIX"               = "bronze/inventory/"
+    "--job-language"                     = "python"
+    "--TempDir"                          = "s3://${var.shopware_glue_bucket_name}/tmp/"
+    "--enable-continuous-cloudwatch-log" = "true"
+    "--enable-continuous-log-filter"     = "true"
+  }
+
+}
 
 resource "aws_glue_catalog_database" "my_catalog_database" {
   name = "shopware"
