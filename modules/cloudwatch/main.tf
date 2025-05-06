@@ -21,7 +21,7 @@ resource "aws_cloudwatch_event_rule" "every_minute" {
   name                = "lambda-schedule"
   description         = "Trigger all producer Lambdas every 1 minute"
   schedule_expression = "rate(1 minute)"
-  state               = "ENABLED"
+  state               = "DISABLED" # Set to DISABLED to avoid
 }
 
 resource "aws_cloudwatch_event_target" "trigger_lambda" {

@@ -99,6 +99,36 @@ resource "aws_glue_job" "move_inventory_glue_job" {
 
 }
 
+resource "aws_glue_job" "transform_to_silver" {
+  for_each = var.glue_jobs
+
+  name     = "transform_${each.key}_to_silver"
+  role_arn = aws_iam_role.glue_service_role.arn
+
+  command {
+    script_location = "s3://${var.shopware_glue_bucket_name}/scripts/${each.value.script_name}"
+    name            = "glueetl" # Use glueetl for Python-based ETL jobs
+    python_version  = "3"
+  }
+
+  default_arguments = {
+    "--database_name"  = "shopware"
+    "--iceberg_table"  = each.value.iceberg_table
+    "--silver_path"    = "s3://${var.lakehouse_bucket_name}/${each.value.silver_key}"
+    "--table_name"     = each.value.table_name
+    "--warehouse_path" = "s3://${var.lakehouse_bucket_name}/silver/"
+    "--enable-metrics" = "true" # Optional: Enable CloudWatch metrics
+    "--job-language"   = "python"
+  }
+
+  max_retries       = 0
+  timeout           = 5      # Timeout in minutes
+  glue_version      = "4.0"  # Use the latest Glue version that supports Iceberg
+  worker_type       = "G.1X" # Adjust based on your workload
+  number_of_workers = 2      # Adjust based on your workload
+}
+
+
 # Triggers
 resource "aws_glue_trigger" "pos_glue_trigger" {
   name     = "trigger_pos_glue_job"
@@ -124,8 +154,7 @@ resource "aws_glue_trigger" "inventory_glue_trigger" {
   enabled = false
 }
 
-
-
+# Glue Database and Crawler
 resource "aws_glue_catalog_database" "my_catalog_database" {
   name = "shopware"
 }
@@ -135,7 +164,31 @@ resource "aws_glue_crawler" "bronze_crawler" {
   name          = "crawl_bronze"
   role          = aws_iam_role.glue_service_role.arn
   table_prefix  = "bronze_"
+
+  classifiers = [aws_glue_classifier.json_classifier.name]
+
   s3_target {
-    path = "s3://${var.lakehouse_bucket_name}/bronze"
+    path        = "s3://${var.lakehouse_bucket_name}/bronze"
+    exclusions  = []
+    sample_size = 10
+  }
+
+  # Simplified configuration with only supported keys
+  configuration = jsonencode({
+    Version = 1
+    # Optionally, add supported configuration options, e.g., CrawlerOutput
+    CrawlerOutput = {
+      Partitions = {
+        AddOrUpdateBehavior = "InheritFromTable"
+      }
+    }
+  })
+}
+
+resource "aws_glue_classifier" "json_classifier" {
+  name = "flatten_json_classifier"
+
+  json_classifier {
+    json_path = "$[*]" # This tells the classifier to expect an array of objects
   }
 }

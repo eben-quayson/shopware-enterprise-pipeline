@@ -52,3 +52,24 @@ resource "aws_s3_object" "transform_crm_to_silver" {
   source = "${path.module}/scripts/transform_crm_to_silver.py"
   etag   = filemd5("${path.module}/scripts/transform_crm_to_silver.py")
 }
+
+resource "aws_s3_object" "transform_pos_to_silver" {
+  bucket = aws_s3_bucket.shopware_glue_bucket.id
+  key    = "scripts/transform_pos_to_silver.py"
+  source = "${path.module}/scripts/transform_pos_to_silver.py"
+  etag   = filemd5("${path.module}/scripts/transform_pos_to_silver.py")
+}
+
+resource "aws_s3_object" "transform_inventory_to_silver" {
+  bucket = aws_s3_bucket.shopware_glue_bucket.id
+  key    = "scripts/transform_inventory_to_silver.py"
+  source = "${path.module}/scripts/transform_inventory_to_silver.py"
+  etag   = filemd5("${path.module}/scripts/transform_inventory_to_silver.py")
+}
+
+resource "aws_s3_object" "transform_wtl_to_silver" {
+  bucket = aws_s3_bucket.shopware_glue_bucket.id
+  key    = "scripts/transform_wtl_to_silver.py"
+  source = "${path.module}/scripts/transform_wtl_to_silver.py"
+  etag   = filemd5("${path.module}/scripts/transform_wtl_to_silver.py")
+}
