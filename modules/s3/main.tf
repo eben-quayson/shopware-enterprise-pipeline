@@ -45,3 +45,10 @@ resource "aws_s3_object" "move_inventory_script" {
   source = "${path.module}/scripts/move_inventory_to_bronze.py"
   etag   = filemd5("${path.module}/scripts/move_inventory_to_bronze.py")
 }
+
+resource "aws_s3_object" "transform_crm_to_silver" {
+  bucket = aws_s3_bucket.shopware_glue_bucket.id
+  key    = "scripts/transform_crm_to_silver.py"
+  source = "${path.module}/scripts/transform_crm_to_silver.py"
+  etag   = filemd5("${path.module}/scripts/transform_crm_to_silver.py")
+}
