@@ -112,18 +112,18 @@ resource "aws_glue_job" "transform_to_silver" {
   }
 
   default_arguments = {
-    "--database_name"  = "shopware"
-    "--iceberg_table"  = each.value.iceberg_table
-    "--silver_path"    = "s3://${var.lakehouse_bucket_name}/${each.value.silver_key}"
-    "--table_name"     = each.value.table_name
-    "--warehouse_path" = "s3://${var.lakehouse_bucket_name}/silver/"
-    "--enable-metrics" = "true" # Optional: Enable CloudWatch metrics
-    "--job-language"   = "python"
+    "--database_name"    = "shopware"
+    "--silver_path"      = "s3://${var.lakehouse_bucket_name}/${each.value.silver_key}"
+    "--table_name"       = each.value.table_name
+    "--enable-metrics"   = "true" # Optional: Enable CloudWatch metrics
+    "--job-language"     = "python"
+    "--conf"             = var.glue_parameter_conf
+    "--datalake-formats" = "delta"
   }
 
   max_retries       = 0
   timeout           = 5      # Timeout in minutes
-  glue_version      = "4.0"  # Use the latest Glue version that supports Iceberg
+  glue_version      = "5.0"  # Use the latest Glue version that supports Iceberg
   worker_type       = "G.1X" # Adjust based on your workload
   number_of_workers = 2      # Adjust based on your workload
 }
