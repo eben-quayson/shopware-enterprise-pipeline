@@ -2,14 +2,14 @@
 
 ## 1. Overview
 
-This architecture implements a modern **data lakehouse** pattern using the **Medallion Architecture** (Bronze, Silver, Gold layers) to structure data processing and analytics. It leverages **Apache Iceberg** for transactional tables on Amazon S3, with **AWS Lake Formation** enforcing fine-grained access control and **Amazon Redshift Spectrum** enabling interactive analytics.
+This architecture implements a modern **data lakehouse** pattern using the **Medallion Architecture** (Bronze, Silver, Gold layers) to structure data processing and analytics. It leverages **Delta Lake** for analytical tables on Amazon S3, with **AWS Lake Formation** enforcing fine-grained access control and **Amazon Redshift Spectrum** enabling interactive analytics.
 
 Key Components:
-- **Apache Iceberg**: Table format with ACID guarantees and schema evolution
+- **Delta Lake**: Table format with ACID guarantees and schema evolution
 - **Amazon S3**: Scalable data lake storage
 - **AWS Lake Formation**: Fine-grained access control and data governance
 - **AWS Glue**: ETL pipelines and table catalog registration
-- **Amazon Redshift Spectrum**: Querying Iceberg tables without loading into Redshift
+- **Amazon Redshift Spectrum**: Querying Delta tables without loading into Redshift
 
 ---
 
@@ -81,9 +81,9 @@ s3://shopware-lakehouse/
 
 - **Lake Formation** policies govern:
   - Table, column, and row-level access
-  - Role-based restrictions (e.g., data scientist vs. analyst)
+  - Role-based restrictions(Marketing Team, Operations Team, Sales Team, Customer Support Team)
 - **IAM + S3** policies restrict Glue and Redshift service access
-- **Redshift Spectrum** reads only from Iceberg tables registered in the catalog
+- **Redshift Spectrum** reads only from Delta tables registered in the catalog
 
 ---
 
@@ -99,7 +99,7 @@ s3://shopware-lakehouse/
 
 - **Data Quality Checks**: Nulls, duplicates, type mismatches in Glue
 - **Audit Trails**: Access logs via Lake Formation + CloudTrail
-- **Lineage**: Tracked via Iceberg snapshots and metadata
+- **Lineage**: Tracked via Delta Lake snapshots and metadata
 - **Metrics Logging**: Via CloudWatch and S3 access logs
 
 ---

@@ -4,7 +4,7 @@
 **Shopware Enterprise Data Lakehouse – Real-Time Analytics Platform**
 
 ## Last Updated
-May 2, 2025
+May 9, 2025
 
 ---
 

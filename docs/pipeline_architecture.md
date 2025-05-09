@@ -19,21 +19,21 @@ This document outlines the technical architecture of the enterprise-grade data p
             +--------------------+
             |     Bronze Layer   |  <-- Raw data in S3
             | (Partitioned S3 w/ |
-            | Apache Iceberg)    |
+            | Delta Lake)    |
             +--------------------+
                     |
                     v
             +--------------------+
             |     Silver Layer   |  <-- Cleaned & conformed
             |  (Glue-transformed |
-            |   Iceberg tables)  |
+            |   Delta Format)  |
             +--------------------+
                     |
                     v
             +--------------------+
             |     Gold Layer     |  <-- Aggregated & enriched
             | (BI-ready metrics, |
-            |  Iceberg format)   |
+            |  Delta format)   |
             +--------------------+
                     |
                     v
@@ -61,7 +61,7 @@ This document outlines the technical architecture of the enterprise-grade data p
 ### 🔄 ETL & Transformation (Bronze → Silver → Gold)
 
 - **Bronze Layer**: Immutable raw data
-  - Format: **Apache Iceberg** tables (partitioned by date/source)
+  - Format: **Delta Lake** tables (partitioned by date/source)
   - Tools: Lambda, Kinesis, direct S3 writes
 - **Silver Layer**: Validated & structured datasets
   - Format: Iceberg tables optimized for query
@@ -78,7 +78,7 @@ This document outlines the technical architecture of the enterprise-grade data p
 - **S3 Buckets**
   - `/bronze/`, `/silver/`, `/gold/` - Medallion layers
   - `/rejected/` - Invalid records
-- **Apache Iceberg Tables**
+- **Delta Tables**
   - Transactional tables per source and layer
   - Stored on S3, catalogued via Glue Data Catalog
 - **Redshift Spectrum**
@@ -114,7 +114,7 @@ This document outlines the technical architecture of the enterprise-grade data p
    - Business logic application
    - Optimization for downstream access
 4. **Query & Visualization**
-   - Data exposed to Redshift Spectrum and QuickSight
+   - Data exposed to Redshift Spectrum and PowerBI
 
 ---
 
@@ -127,6 +127,6 @@ This document outlines the technical architecture of the enterprise-grade data p
 ---
 
 **Maintainer**: Ebenezer Quayson  
-```
+
 
 

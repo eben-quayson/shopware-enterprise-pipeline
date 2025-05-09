@@ -1,6 +1,6 @@
 # 🛒 Shopware Enterprise Data Lakehouse
 
-A scalable, secure, and governed data lakehouse built on **Apache Iceberg**, **AWS Lake Formation**, and **Redshift Spectrum**, designed to serve batch and real-time analytics needs across various business domains/departments at Shopware.
+A scalable, secure, and governed data lakehouse built on **Delta Lake**, **AWS Lake Formation**, and **Redshift Spectrum**, designed to serve batch and real-time analytics needs across various business domains/departments at Shopware.
 
 ---
 
@@ -12,7 +12,7 @@ This project follows the **Medallion Architecture (Bronze → Silver → Gold)**
 - **Silver Layer**: Cleaned, validated, deduplicated data
 - **Gold Layer**: Aggregated, business-consumable KPIs
 
-Data is stored in **Apache Iceberg** table format across all layers and catalogued via **AWS Glue**. Access control is managed using **AWS Lake Formation**, and BI dashboards connect via **Amazon Redshift Spectrum** and **QuickSight**.
+Data is stored in **Delta Lake** table format across all layers and catalogued via **AWS Glue**. Access control is managed using **AWS Lake Formation**, and BI dashboards connect via **Amazon Redshift Spectrum** and **PowerBI**.
 
 ---
 
@@ -86,8 +86,8 @@ Terraform is used to provision:
 
 ## 📄 Documentation
 
-- [Architecture Overview](docs/architecture.md)
-- [Pipeline Details](docs/pipeline_architecture.md)
+- [Architecture Overview](docs/pipeline_architecture.md)
+- [Lakehouse Architecture](docs/lakehouse_architecture.md)
 - [Security](docs/security.md)
 - [Progress Tracker](docs/progress_documentation.md)
 
