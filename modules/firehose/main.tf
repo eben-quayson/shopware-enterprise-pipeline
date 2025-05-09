@@ -44,7 +44,8 @@ resource "aws_kinesis_firehose_delivery_stream" "crm_firehose_stream" {
 
     prefix              = "bronze/crm/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/"
     error_output_prefix = "bronze/error/crm/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/!{firehose:error-output-type}/"
-
+    buffering_size      = 1
+    buffering_interval  = 60
     cloudwatch_logging_options {
       enabled         = true
       log_group_name  = "/aws/kinesisfirehose/crm-firehose-stream"
@@ -63,7 +64,8 @@ resource "aws_kinesis_firehose_delivery_stream" "wtl_firehose_stream" {
     compression_format  = "GZIP"
     prefix              = "bronze/wtl/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/"
     error_output_prefix = "bronze/wtl/error/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/!{firehose:error-output-type}/"
-
+    buffering_size      = 1
+    buffering_interval  = 60
     cloudwatch_logging_options {
       enabled         = true
       log_group_name  = "/aws/kinesisfirehose/wtl-firehose-stream"

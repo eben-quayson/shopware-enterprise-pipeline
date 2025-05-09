@@ -100,7 +100,7 @@ resource "aws_glue_job" "move_inventory_glue_job" {
 }
 
 resource "aws_glue_job" "transform_to_silver" {
-  for_each = var.glue_jobs
+  for_each = var.silver_glue_jobs
 
   name     = "transform_${each.key}_to_silver"
   role_arn = aws_iam_role.glue_service_role.arn
@@ -112,13 +112,41 @@ resource "aws_glue_job" "transform_to_silver" {
   }
 
   default_arguments = {
-    "--database_name"    = "shopware"
-    "--silver_path"      = "s3://${var.lakehouse_bucket_name}/${each.value.silver_key}"
-    "--table_name"       = each.value.table_name
-    "--enable-metrics"   = "true" # Optional: Enable CloudWatch metrics
-    "--job-language"     = "python"
-    "--conf"             = var.glue_parameter_conf
-    "--datalake-formats" = "delta"
+    "--database_name"       = "shopware"
+    "--silver_path"         = "s3://${var.lakehouse_bucket_name}/${each.value.silver_key}"
+    "--table_name"          = each.value.table_name
+    "--enable-metrics"      = "true" # Optional: Enable CloudWatch metrics
+    "--job-language"        = "python"
+    "--conf"                = var.glue_parameter_conf
+    "--datalake-formats"    = "delta"
+    "--enable-job-insights" = "true"
+  }
+
+  max_retries       = 0
+  timeout           = 5      # Timeout in minutes
+  glue_version      = "5.0"  # Use the latest Glue version that supports Iceberg
+  worker_type       = "G.1X" # Adjust based on your workload
+  number_of_workers = 2      # Adjust based on your workload
+}
+
+resource "aws_glue_job" "compute_to_gold" {
+  for_each = var.gold_glue_jobs
+  name     = each.key
+  role_arn = aws_iam_role.glue_service_role.arn
+
+  command {
+    script_location = "s3://${var.shopware_glue_bucket_name}/scripts/${each.value.script_name}"
+    name            = "glueetl" # Use glueetl for Python-based ETL jobs
+    python_version  = "3"
+  }
+
+  default_arguments = {
+    "--enable-metrics"      = "true" # Optional: Enable CloudWatch metrics
+    "--job-language"        = "python"
+    "--BUCKET_NAME"         = var.lakehouse_bucket_name
+    "--conf"                = var.glue_parameter_conf
+    "--datalake-formats"    = "delta"
+    "--enable-job-insights" = "true"
   }
 
   max_retries       = 0
@@ -183,6 +211,37 @@ resource "aws_glue_crawler" "bronze_crawler" {
       }
     }
   })
+}
+
+resource "aws_glue_crawler" "silver_crawler" {
+  database_name = aws_glue_catalog_database.my_catalog_database.name
+  name          = "crawl_silver"
+  role          = aws_iam_role.glue_service_role.arn
+  table_prefix  = "silver_"
+
+  delta_target {
+    delta_tables = [
+      "s3://${var.lakehouse_bucket_name}/silver/customer_interaction/",
+      "s3://${var.lakehouse_bucket_name}/silver/inventory/",
+      "s3://${var.lakehouse_bucket_name}/silver/pos/",
+      "s3://${var.lakehouse_bucket_name}/silver/wtl/",
+    ]
+    write_manifest = true
+  }
+}
+
+resource "aws_glue_crawler" "gold_crawler" {
+  database_name = aws_glue_catalog_database.my_catalog_database.name
+  name          = "crawl_gold"
+  role          = aws_iam_role.glue_service_role.arn
+  table_prefix  = "gold_"
+
+  s3_target {
+    path        = "s3://${var.lakehouse_bucket_name}/gold"
+    exclusions  = []
+    sample_size = 10
+  }
+
 }
 
 resource "aws_glue_classifier" "json_classifier" {

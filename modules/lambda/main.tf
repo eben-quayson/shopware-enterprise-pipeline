@@ -5,6 +5,13 @@ data "archive_file" "lambda_producers" {
   output_path = "${path.module}/scripts/producers/${each.key}.zip"
 }
 
+# data "archive_file" "lambda_consumers" {
+#   for_each    = var.producers
+#   type        = "zip"
+#   source_file = "${path.module}/scripts/consumers/${each.key}.py"
+#   output_path = "${path.module}/scripts/consumers/${each.key}.zip"
+# }
+
 
 # --- I am policy document allowing lambda to assume role ---
 data "aws_iam_policy_document" "lambda_assume_role_policy" {
@@ -76,4 +83,11 @@ resource "aws_lambda_function" "producers" {
   }
 }
 
+# resource "aws_lambda_function" "consumers" {
+#   for_each      = data.archive_file.lambda_consumers
+#   role          = aws_iam_role.lambda_execution_role.arn
+#   function_name = each.key
+#   handler       = "${each.key}.lambda_handler"
+#   runtime       = "python3.8"
+# }
 

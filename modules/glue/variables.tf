@@ -16,7 +16,7 @@ variable "glue_parameter_conf" {
   default = "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension --conf spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog --conf spark.delta.logStore.class=org.apache.spark.sql.delta.storage.S3SingleDriverLogStore"
 }
 
-variable "glue_jobs" {
+variable "silver_glue_jobs" {
   description = "Map of Glue job configurations"
   type = map(object({
     silver_key  = string
@@ -45,5 +45,32 @@ variable "glue_jobs" {
       script_name = "transform_crm_to_silver.py"
     }
   }
+}
+
+variable "gold_glue_jobs" {
+  description = "Map of Glue job configurations"
+  type = map(object({
+    gold_key    = string
+    table_name  = string
+    script_name = string
+  }))
+  default = {
+    customer_kpis = {
+      gold_key    = "gold/customer_kpis/"
+      table_name  = "customer_kpis"
+      script_name = "compute_customer_kpis.py"
+    },
+    marketing_kpis = {
+      gold_key    = "gold/marketing_kpis/"
+      table_name  = "marketing_kpis"
+      script_name = "compute_marketing_kpis.py"
+    },
+    sales_kpis = {
+      gold_key    = "gold/sales_kpis/"
+      table_name  = "sales_kpis"
+      script_name = "compute_sales_kpis.py"
+    }
+  }
+
 }
 
