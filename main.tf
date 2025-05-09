@@ -11,6 +11,7 @@ module "lambda" {
 
   crm_firehose_stream_name = var.crm_firehose_stream_name
   wtl_firehose_stream_name = var.wtl_firehose_stream_name
+  sfns                     = var.sfns
 }
 
 module "iam" {
@@ -28,7 +29,10 @@ module "firehose" {
 module "cloudwatch" {
   source = "./modules/cloudwatch"
 
-  lambda_producers = module.lambda.lambda_producers
+  lambda_producers    = module.lambda.lambda_producers
+  sfns                = var.sfns
+  lambda_trigger_name = module.lambda.sfn_trigger_lambda_name
+  lambda_trigger_arn  = module.lambda.sfn_trigger_lambda_arn
 }
 
 module "glue" {

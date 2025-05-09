@@ -26,3 +26,9 @@ variable "wtl_firehose_stream_name" {
   description = "The name of the Kinesis Firehose stream for web traffic logs."
   default     = "web-traffic-firehose-stream"
 }
+
+variable "sfns" {
+  type = map(object({
+    arn = string
+  }))
+}
