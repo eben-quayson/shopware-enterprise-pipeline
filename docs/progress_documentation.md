@@ -10,7 +10,7 @@ May 9, 2025
 
 ## Overview
 
-This documentation outlines the progress and contributions of each team member in building a data lakehouse for Shopware using Apache Iceberg, AWS Glue, Redshift Spectrum, and Lake Formation. The project follows the **Medallion Architecture** (Bronze, Silver, Gold) to enable scalable, secure, and actionable data pipelines for both batch and streaming sources.
+This documentation outlines the progress and contributions of each team member in building a data lakehouse for Shopware using Delta Lake, AWS Glue, Redshift Spectrum, and Lake Formation. The project follows the **Medallion Architecture** (Bronze, Silver, Gold) to enable scalable, secure, and actionable data pipelines for both batch and streaming sources.
 
 ---
 
@@ -49,7 +49,7 @@ This documentation outlines the progress and contributions of each team member i
 - Wrote **AWS Glue jobs** to:
   - Perform **data cleaning**, validation, and deduplication
   - Transform raw Bronze-layer data into enriched Silver-layer datasets
-  - Aggregate data into Gold-layer Apache Iceberg tables for analytics
+  - Aggregate data into Gold-layer delta tables for analytics
 - Ensured conformity with schema definitions and medallion standards
 - Embedded audit and trace metadata in processed datasets
 
@@ -83,8 +83,6 @@ This documentation outlines the progress and contributions of each team member i
 - Enable column- and row-level access controls in Lake Formation (Ebenezer)
 - Add watermarking to streaming data for late-arrival handling (Ebenezer)
 - Optimize Glue transformations with dynamic partitioning (Brempong)
-- Integrate CI/CD with Terraform Cloud (Marzuk)
-- Deploy usage dashboards in QuickSight (Prince)
 
 ---
 

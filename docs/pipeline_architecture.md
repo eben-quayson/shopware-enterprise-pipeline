@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the technical architecture of the enterprise-grade data pipeline built for Shopware. The architecture integrates both batch and streaming data into a secure, governed **Lakehouse** powered by **Apache Iceberg**, utilizing the **Medallion Architecture** to deliver reliable, scalable, and actionable analytics.
+This document outlines the technical architecture of the enterprise-grade data pipeline built for Shopware. The architecture integrates both batch and streaming data into a secure, governed **Lakehouse** powered by **Delta Lake**, utilizing the **Medallion Architecture** to deliver reliable, scalable, and actionable analytics.
 
 ---
 
@@ -52,7 +52,7 @@ This document outlines the technical architecture of the enterprise-grade data p
 
 - **Streaming Sources**: Web Logs & Customer Interactions
   - Ingested via custom **Lambda/Kinesis → S3** scripts (Ebenezer)
-  - Landed in the **Bronze Layer** (raw bucket with Apache Iceberg)
+  - Landed in the **Bronze Layer** (raw bucket with Delta Lake)
 - **Batch Sources**: POS & Inventory Management
   - Periodically synced to **Bronze Layer S3** via AWS Glue or Lambda
 
