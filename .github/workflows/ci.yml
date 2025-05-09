@@ -38,6 +38,12 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: eu-west-1
+          TF_VAR_region: ${{ secrets.TF_VAR_REGION }}
+          TF_VAR_lakehouse_bucket_name: ${{ secrets.TF_VAR_LAKEHOUSE_BUCKET_NAME }}
+          TF_VAR_shopware_glue_bucket_name: ${{ secrets.TF_VAR_SHOPWARE_GLUE_BUCKET_NAME }}
+          TF_VAR_ingestion_bucket_name: ${{ secrets.TF_VAR_INGESTION_BUCKET_NAME }}
+          TF_VAR_sfns_stream_arn: ${{ secrets.TF_VAR_SFNS_STREAM_ARN }}
+          TF_VAR_sfns_daily_arn: ${{ secrets.TF_VAR_SFNS_DAILY_ARN }}
         run: terraform plan -input=false -out=terraform.tfplan
 
       - name: Show Terraform Plan
