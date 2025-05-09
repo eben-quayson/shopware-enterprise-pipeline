@@ -24,7 +24,9 @@ crash.log
 
 # Ignore log files
 *.log
+
 .vscode
+
 
 # Ignore system-specific files
 .DS_Store

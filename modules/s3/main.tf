@@ -3,6 +3,7 @@ resource "aws_s3_bucket" "lakehouse_bucket" {
 }
 
 
+
 resource "aws_s3_bucket" "shopware_glue_bucket" {
   bucket = var.shopware_glue_bucket_name
 }

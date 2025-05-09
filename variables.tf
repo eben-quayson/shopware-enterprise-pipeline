@@ -7,6 +7,7 @@ variable "lakehouse_bucket_name" {
   type = string
 }
 
+
 variable "shopware_glue_bucket_name" {
   type = string
 }
@@ -32,3 +33,4 @@ variable "sfns" {
     arn = string
   }))
 }
+
