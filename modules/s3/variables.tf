@@ -19,6 +19,7 @@ variable "script_files" {
     compute_customer_kpis         = "compute_customer_kpis.py"
     compute_marketing_kpis        = "compute_marketing_kpis.py"
     compute_sales_kpis            = "compute_sales_kpis.py"
+    compute_operations_kpis       = "compute_operations_kpis.py"
     move_inventory_to_bronze      = "move_inventory_to_bronze.py"
     move_pos_to_bronze            = "move_pos_to_bronze.py"
     transform_crm_to_silver       = "transform_crm_to_silver.py"

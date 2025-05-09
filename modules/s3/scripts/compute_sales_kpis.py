@@ -41,8 +41,8 @@ year, month, day = processing_date.split("-")
 BUCKET_NAME = args['BUCKET_NAME']
 
 # Paths
-pos_s3_path = f"s3://{BUCKET_NAME}/silver/pos/year={year}/month={month}/day={day}/"
-inventory_s3_path = f"s3://{BUCKET_NAME}/silver/inventory/year={year}/month={month}/day={day}/"
+pos_s3_path = f"s3://{BUCKET_NAME}/silver/pos/year={year}/month={month}/"
+inventory_s3_path = f"s3://{BUCKET_NAME}/silver/inventory/year={year}/month={month}/"
 s3_output_path = f"s3://{BUCKET_NAME}/gold/sales_mart/year={year}/month={month}/day={day}/"
 
 logger.info(f"Paths set: POS data path: {pos_s3_path}, Inventory data path: {inventory_s3_path}, Output path: {s3_output_path}")

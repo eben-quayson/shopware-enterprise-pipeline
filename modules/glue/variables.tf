@@ -69,6 +69,11 @@ variable "gold_glue_jobs" {
       gold_key    = "gold/sales_kpis/"
       table_name  = "sales_kpis"
       script_name = "compute_sales_kpis.py"
+    },
+    operations_kpis = {
+      gold_key    = "gold/operations_kpis/"
+      table_name  = "operations_kpis"
+      script_name = "compute_operations_kpis.py"
     }
   }
 

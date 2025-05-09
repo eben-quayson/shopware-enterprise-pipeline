@@ -43,8 +43,8 @@ logger.info("Setting up job configurations...")
 processing_date = datetime.date.today()
 year, month, day = processing_date.strftime("%Y"), processing_date.strftime("%m"), processing_date.strftime("%d")
 bucket_name = args['BUCKET_NAME']
-input_pos_path = f"s3://{bucket_name}/silver/pos/year={year}/month={month}/day={day}/"
-input_inventory_path = f"s3://{bucket_name}/silver/inventory/year={year}/month={month}/day={day}/"
+input_pos_path = f"s3://{bucket_name}/silver/pos/year={year}/month={month}/"
+input_inventory_path = f"s3://{bucket_name}/silver/inventory/year={year}/month={month}/"
 output_gold_s3_path_base = f"s3://{bucket_name}/gold/operations_kpis/"
 logger.info(f"Input POS Delta Path: {input_pos_path}")
 logger.info(f"Input Inventory Delta Path: {input_inventory_path}")
@@ -85,8 +85,8 @@ logger.info("Data Loading phase completed.")
 logger.info("Starting KPI Calculation phase...")
 
 # Convert epoch timestamps to date for filtering
-pos_df = pos_df.withColumn("transaction_date", to_date(from_unixtime(col("timestamp"))))
-inventory_df = inventory_df.withColumn("update_date", to_date(from_unixtime(col("last_updated"))))
+pos_df = pos_df.withColumn("transaction_date", to_date(col("timestamp")))
+inventory_df = inventory_df.withColumn("update_date", to_date(col("last_updated")))
 
 # Filter for the specific processing date
 processing_date_str = f"{year}-{month}-{day}"
