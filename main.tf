@@ -43,7 +43,6 @@ module "glue" {
   ingestion_bucket_name     = var.ingestion_bucket_name
 }
 
-=======
   lakehouse_bucket_name = var.lakehouse_bucket_name
 }
 
