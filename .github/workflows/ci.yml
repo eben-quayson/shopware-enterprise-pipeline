@@ -46,5 +46,5 @@ jobs:
       #     TF_VAR_sfns_daily_arn: ${{ secrets.TF_VAR_SFNS_DAILY_ARN }}
       #   run: terraform plan -input=false -out=terraform.tfplan
 
-      - name: Show Terraform Plan
-        run: terraform show terraform.tfplan
+      # - name: Show Terraform Plan
+      #   run: terraform show terraform.tfplan
